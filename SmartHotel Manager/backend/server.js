@@ -1,50 +1,67 @@
 // 🔹 Importações
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
-// 🔹 Model
-const Reserva = require('./models/Reserva');
+// 🔹 Importar conexão com BD
+const connectDB = require('./config/database');
+
+// 🔹 Importar middlewares
+const errorHandler = require('./middleware/errorHandler');
+
+// 🔹 Importar rotas
+const reservasRoutes = require('./routes/reservas');
+const quartosRoutes = require('./routes/quartos');
+const hospedesRoutes = require('./routes/hospedes');
+const pagamentosRoutes = require('./routes/pagamentos');
 
 // 🔹 Inicialização do app
 const app = express();
 
-// 🔹 Middlewares
-app.use(cors());
-app.use(express.json());
+// 🔹 Conectar ao MongoDB
+connectDB();
 
-// 🔹 Conexão com MongoDB LOCAL
-mongoose.connect('mongodb://localhost:27017/hotel')
-  .then(() => console.log('MongoDB conectado LOCAL'))
-  .catch(err => console.log('Erro ao conectar:', err));
+// 🔹 Middlewares
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*',
+  credentials: true,
+}));
+app.use(express.json());
 
 // 🔹 Rota inicial (teste)
 app.get('/', (req, res) => {
-  res.send('API funcionando');
+  res.json({
+    mensagem: '✅ API Smart Hotel Manager funcionando!',
+    version: '1.0.0',
+    endpoints: {
+      hospedes: '/hospedes',
+      quartos: '/quartos',
+      reservas: '/reservas',
+      pagamentos: '/pagamentos',
+    },
+  });
 });
 
-// 🔹 ROTA: Criar reserva (POST)
-app.post('/reservas', async (req, res) => {
-  try {
-    const novaReserva = new Reserva(req.body);
-    await novaReserva.save();
-    res.status(201).json(novaReserva);
-  } catch (error) {
-    res.status(500).json({ erro: 'Erro ao salvar reserva' });
-  }
+// 🔹 Rotas da API
+app.use('/hospedes', hospedesRoutes);
+app.use('/quartos', quartosRoutes);
+app.use('/reservas', reservasRoutes);
+app.use('/pagamentos', pagamentosRoutes);
+
+// 🔹 Rota 404
+app.use((req, res) => {
+  res.status(404).json({
+    erro: 'Rota não encontrada',
+    endpoint: req.originalUrl,
+  });
 });
 
-// 🔹 ROTA: Listar reservas (GET)
-app.get('/reservas', async (req, res) => {
-  try {
-    const reservas = await Reserva.find();
-    res.json(reservas);
-  } catch (error) {
-    res.status(500).json({ erro: 'Erro ao buscar reservas' });
-  }
-});
+// 🔹 Middleware de tratamento de erros (deve ser o último)
+app.use(errorHandler);
 
 // 🔹 Inicializar servidor
-app.listen(3000, () => {
-  console.log('Servidor rodando na porta 3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+  console.log(`📝 Ambiente: ${process.env.NODE_ENV || 'development'}`);
 });
