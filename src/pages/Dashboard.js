@@ -1,44 +1,93 @@
 import './Dashboard.css';
 
-function Dashboard({ setPage }) {
+function Dashboard({
+  setPage,
+  reservas,
+  setReservas
+}) {
+
+  const hotels = [
+    {
+      id: 1,
+      nome: 'Hotel Paradise',
+      preco: 320,
+      imagem: '/IMG/hotel1.jpg'
+    },
+    {
+      id: 2,
+      nome: 'Luxury Resort',
+      preco: 450,
+      imagem: '/IMG/hotel2.jpg'
+    },
+    {
+      id: 3,
+      nome: 'Smart Inn',
+      preco: 280,
+      imagem: '/IMG/hotel3.jpg'
+    }
+  ];
+
+  const adicionarReserva = (hotel) => {
+    setReservas([...reservas, hotel]);
+    alert('Reserva adicionada!');
+  };
+
   return (
-    <div className="dashboard">
+    <div className="dashboard-container">
 
-      {/* HEADER */}
-      <div className="header">
-        <p>📍 São Paulo, SP</p>
-        <button onClick={() => setPage('reservas')}>
-          Minhas Reservas
+      <header className="header">
+        <div>
+          <h2>Olá, Usuário 👋</h2>
+          <p>São Paulo - SP</p>
+        </div>
+
+        <button onClick={() => setPage('login')}>
+          Sair
         </button>
+      </header>
+
+      <div className="banner">
+        <h3>20% OFF em reservas premium</h3>
       </div>
 
-      {/* CUPOM */}
-      <div className="cupom">
-        🎟️ 10% OFF na sua primeira reserva
-      </div>
-
-      {/* BUSCA */}
       <input
         className="search"
-        placeholder="Para onde você deseja viajar?"
+        placeholder="Buscar hotéis..."
       />
 
-      {/* CARDS */}
-      <div className="cards">
+      <div className="hotel-list">
+        {hotels.map((hotel) => (
+          <div className="hotel-card" key={hotel.id}>
 
-        <div className="card">
-          <img src="/IMG/hotel1.jpg" alt="hotel" />
-          <p>Hotel Luxo</p>
-          <span>R$ 250</span>
-        </div>
+            <img
+              src={hotel.imagem}
+              alt={hotel.nome}
+            />
 
-        <div className="card">
-          <img src="/IMG/hotel2.jpg" alt="hotel" />
-          <p>Resort Praia</p>
-          <span>R$ 400</span>
-        </div>
+            <div className="hotel-info">
+              <h3>{hotel.nome}</h3>
 
+              <p>R$ {hotel.preco}/noite</p>
+
+              <button
+                onClick={() =>
+                  adicionarReserva(hotel)
+                }
+              >
+                Reservar
+              </button>
+            </div>
+
+          </div>
+        ))}
       </div>
+
+      <button
+        className="reservas-btn"
+        onClick={() => setPage('reservas')}
+      >
+        Ver Reservas
+      </button>
 
     </div>
   );

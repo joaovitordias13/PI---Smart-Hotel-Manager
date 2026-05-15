@@ -1,33 +1,72 @@
 import './Reservas.css';
 
-function Reservas({ setPage }) {
+function Reservas({
+  reservas,
+  setReservas,
+  setPage
+}) {
+
+  const removerReserva = (index) => {
+    const novasReservas = [...reservas];
+    novasReservas.splice(index, 1);
+    setReservas(novasReservas);
+  };
+
+  const total = reservas.reduce(
+    (acc, item) => acc + item.preco,
+    0
+  );
+
   return (
-    <div className="reservas">
+    <div className="reservas-container">
 
-      {/* TOPO */}
-      <div className="topo">
-        <button onClick={() => setPage('dashboard')}>⬅</button>
-        <h2>Minhas Reservas</h2>
+      <button
+        className="voltar-btn"
+        onClick={() => setPage('dashboard')}
+      >
+        ← Voltar
+      </button>
+
+      <h1>Minhas Reservas</h1>
+
+      {reservas.length === 0 ? (
+        <p>Nenhuma reserva adicionada.</p>
+      ) : (
+        reservas.map((hotel, index) => (
+          <div
+            className="reserva-card"
+            key={index}
+          >
+
+            <img
+              src={hotel.imagem}
+              alt={hotel.nome}
+            />
+
+            <div>
+              <h3>{hotel.nome}</h3>
+              <p>R$ {hotel.preco}</p>
+            </div>
+
+            <button
+              onClick={() =>
+                removerReserva(index)
+              }
+            >
+              ❌
+            </button>
+
+          </div>
+        ))
+      )}
+
+      <div className="total-box">
+        <h2>Total: R$ {total}</h2>
+
+        <button>
+          Finalizar Reserva
+        </button>
       </div>
-
-      {/* CARD */}
-      <div className="reserva-card">
-        <img src="/IMG/hotel1.jpg" alt="hotel" />
-        <div>
-          <p>Hotel Luxo</p>
-          <span>01/01/2026</span>
-        </div>
-        <button>🗑️</button>
-      </div>
-
-      {/* RESUMO */}
-      <div className="resumo">
-        <p>Subtotal: R$ 250</p>
-        <p>Taxas: R$ 20</p>
-        <p>Total: R$ 270</p>
-      </div>
-
-      <button className="reservar">Reservar</button>
 
     </div>
   );

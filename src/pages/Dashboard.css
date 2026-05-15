@@ -95,3 +95,19 @@
   }
 
 }
+@media (max-width: 768px) {
+
+  .hotel-card {
+    flex-direction: column;
+  }
+
+  .hotel-card img {
+    width: 100%;
+  }
+
+  .header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+}

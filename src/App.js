@@ -2,15 +2,35 @@ import { useState } from 'react';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Reservas from './pages/Reservas';
+import './App.css';
 
 function App() {
   const [page, setPage] = useState('login');
+  const [reservas, setReservas] = useState([]);
 
-  if (page === 'login') return <Login setPage={setPage} />;
-  if (page === 'dashboard') return <Dashboard setPage={setPage} />;
-  if (page === 'reservas') return <Reservas setPage={setPage} />;
+  return (
+    <>
+      {page === 'login' && (
+        <Login setPage={setPage} />
+      )}
 
-  return null;
+      {page === 'dashboard' && (
+        <Dashboard
+          setPage={setPage}
+          reservas={reservas}
+          setReservas={setReservas}
+        />
+      )}
+
+      {page === 'reservas' && (
+        <Reservas
+          setPage={setPage}
+          reservas={reservas}
+          setReservas={setReservas}
+        />
+      )}
+    </>
+  );
 }
 
 export default App;

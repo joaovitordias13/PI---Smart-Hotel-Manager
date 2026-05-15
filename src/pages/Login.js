@@ -1,32 +1,56 @@
+import { useState } from 'react';
 import './Login.css';
 
 function Login({ setPage }) {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [erro, setErro] = useState('');
 
   const handleLogin = () => {
-    const user = document.querySelector('input[type="text"]').value;
-    const pass = document.querySelector('input[type="password"]').value;
-
-    if (user === 'admin' && pass === '123') {
+    if (
+      email === 'admin@email.com' &&
+      senha === '123456'
+    ) {
       setPage('dashboard');
     } else {
-      alert('Usuário ou senha incorretos');
+      setErro('E-mail ou senha inválidos');
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
+        <h1>SmartHotel</h1>
 
-        <div className="logo">🏨</div>
+        <p>Sign in to continue</p>
 
-        <h1>Login</h1>
-        <p className="subtitle">Sign in to continue</p>
+        <input
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-        <input type="text" placeholder="Usuário" />
-        <input type="password" placeholder="Senha" />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+        />
 
-        <button onClick={handleLogin}>Entrar</button>
+        {erro && <span className="erro">{erro}</span>}
 
+        <button onClick={handleLogin}>
+          Entrar
+        </button>
+
+        <small>
+          Login teste:
+          <br />
+          admin@email.com
+          <br />
+          123456
+        </small>
       </div>
     </div>
   );
