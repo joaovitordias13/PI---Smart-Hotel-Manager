@@ -1,11 +1,79 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const Reserva = require('../models/Reserva');
+const Hospede = require('../models/Hospede');
+const Quarto = require('../models/Quarto');
 
 // ➕ CRIAR reserva
 router.post('/', async (req, res, next) => {
   try {
-    const reserva = new Reserva(req.body);
+    const {
+      hospede: hospedePayload,
+      quarto: quartoPayload,
+      dataCheckIn,
+      dataCheckOut,
+      precoTotal,
+      numeroHospedes,
+      observacoes,
+      status,
+    } = req.body;
+
+    let hospede = hospedePayload;
+
+    if (hospede && typeof hospede === 'object' && !mongoose.isValidObjectId(hospede)) {
+      const email = hospede?.email || 'hospede@hotel.com';
+      const cpf = hospede?.cpf || '00000000000';
+      const telefone = hospede?.telefone || '11900000000';
+      const nome = hospede?.nome || 'Hóspede temporário';
+      const dataNascimento = hospede?.dataNascimento || '1990-01-01';
+
+      hospede = await Hospede.findOne({ email });
+      if (!hospede) {
+        hospede = await Hospede.create({
+          nome,
+          email,
+          telefone,
+          cpf,
+          dataNascimento,
+          endereco: hospede?.endereco || {},
+          nacionalidade: hospede?.nacionalidade || 'Brasileira',
+          documento: hospede?.documento || { tipo: 'CPF', numero: cpf },
+        });
+      }
+      hospede = hospede._id;
+    }
+
+    let quarto = quartoPayload;
+    if (quarto && typeof quarto === 'object' && quarto._id) {
+      quarto = quarto._id;
+    }
+
+    const quartoDocumento = await Quarto.findById(quarto);
+    if (!quartoDocumento) {
+      return res.status(400).json({
+        erro: 'Quarto inválido para a reserva',
+      });
+    }
+
+    const entrada = dataCheckIn ? new Date(dataCheckIn) : new Date();
+    const saida = dataCheckOut
+      ? new Date(dataCheckOut)
+      : new Date(entrada.getTime() + 24 * 60 * 60 * 1000);
+
+    const valorTotal = precoTotal || quartoDocumento.precoPorNoite;
+
+    const reserva = new Reserva({
+      hospede,
+      quarto,
+      dataCheckIn: entrada,
+      dataCheckOut: saida,
+      precoTotal: valorTotal,
+      status: status || 'pendente',
+      numeroHospedes: numeroHospedes || 1,
+      observacoes,
+    });
+
     await reserva.save();
     await reserva.populate('hospede quarto');
     
