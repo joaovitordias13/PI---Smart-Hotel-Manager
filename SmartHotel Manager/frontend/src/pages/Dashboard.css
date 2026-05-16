@@ -1,0 +1,142 @@
+.dashboard-container {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(180deg, #fffaf6 0%, #f3f4f6 100%);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.header h2 {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.header p {
+  color: #475569;
+  font-size: 0.95rem;
+}
+
+.header button {
+  background: #ff5a1f;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-weight: 700;
+  box-shadow: 0 16px 40px rgba(255, 90, 31, 0.16);
+}
+
+.banner {
+  background: #ffeedc;
+  border: 1px solid rgba(255, 90, 31, 0.15);
+  padding: 18px 22px;
+  border-radius: 22px;
+  margin-bottom: 22px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.banner h3 {
+  margin: 0;
+  color: #b45309;
+}
+
+.search {
+  width: 100%;
+  max-width: 680px;
+  padding: 14px 18px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 22px;
+  background: white;
+}
+
+.erro {
+  margin-bottom: 18px;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.hotel-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.hotel-card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+.hotel-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.hotel-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hotel-info h3 {
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.hotel-info p {
+  margin: 0;
+  color: #475569;
+}
+
+.hotel-info button {
+  margin-top: auto;
+  background: #ff5a1f;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 12px;
+  font-weight: 700;
+}
+
+.reservas-btn {
+  width: 100%;
+  max-width: 680px;
+  display: inline-flex;
+  justify-content: center;
+  padding: 16px 22px;
+  background: #fb6d3a;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-weight: 700;
+  box-shadow: 0 18px 40px rgba(251, 109, 58, 0.18);
+}
+
+@media (max-width: 720px) {
+  .dashboard-container {
+    padding: 18px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reservas-btn {
+    width: 100%;
+  }
+}
